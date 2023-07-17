@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql
+    restart: unless-stopped
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=myDb
+    ports:
+      - 3306:3306
+   
+  spring-mysql-docker:
+    depends_on:
+      - mysqldb
+    build: ./bezkoder-app
+    restart: on-failure
+    
+    ports:
+      - 8585:8080
+   
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
